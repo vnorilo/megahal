@@ -26,7 +26,7 @@ class MegaHAL:
 
     def interpret(self, symbols):
         sentence = "".join(self.dictionary[i] for i in symbols if i>1).lower()
-        return re.sub(r'([.!?]|^)(\s*)([a-z])', lambda x: x.group(1) + x.group(2) + x.group(3).upper(), sentence)
+        return re.sub(r'([.!?]|^)(\s*[a-z])', lambda x: x.group(1) + x.group(2).upper(), sentence)
 
     def find_context(self, predictor, key):
         if len(key) < 1 or predictor is None:

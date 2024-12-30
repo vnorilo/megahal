@@ -19,6 +19,7 @@ def main():
     parser.add_argument('--interactive', action='store_true', help='Enter interactive mode with prompt/reply loop')
     parser.add_argument('--input', type=str, help='Provide a one-off input sentence for a reply')
     parser.add_argument('--learn', action='store_true', help='Enable model learning from input')
+    parser.add_argument('--train', type=str, help='Train the model from a text file')
     parser.add_argument('--import_brain', type=str, help='Path to old format brain file to load as baseline')
     parser.add_argument('--brain', type=str, default="megahal.pkl", help='Filename for new format brain')
     parser.add_argument('--print', action='store_true', help='Dump the model to stdout')
@@ -32,6 +33,11 @@ def main():
         bot = ImportC.import_model(args.import_brain)
     else:
         bot = checkpoint.load_checkpoint() or MegaHAL()
+
+    if args.train:
+        with open(args.train,"r") as corpus:
+            for line in corpus:
+                bot.learn(line)
 
     if args.print:
         print(json.dumps(bot.to_dict()))
@@ -51,7 +57,7 @@ def main():
     elif args.input:
         talk(bot, args.input, args.learn)
 
-    if args.learn or args.import_brain:
+    if args.learn or args.import_brain or args.train:
         checkpoint.save_checkpoint(bot)
 
 

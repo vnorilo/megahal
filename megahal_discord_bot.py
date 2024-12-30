@@ -4,6 +4,21 @@ import megahal
 import zipfile
 import pickle
 import os
+import json  # Added to handle JSON configuration
+
+def load_config():
+    config_path = 'config.json'
+    if not os.path.exists(config_path):
+        raise FileNotFoundError(f"{config_path} not found. Please create it and add your Discord token.")
+    with open(config_path, 'r') as config_file:
+        return json.load(config_file)
+
+# Load configuration from config.json
+config = load_config()
+DISCORD_TOKEN = config.get('DISCORD_TOKEN')
+
+if not DISCORD_TOKEN:
+    raise ValueError("DISCORD_TOKEN not found in config.json")
 
 class MegaHALBot(commands.Bot):
     def __init__(self, brain_file="megahal.pkl", learn=True):
@@ -46,8 +61,6 @@ class MegaHALBot(commands.Bot):
             if self.learn_mode:
                 self.megahal.learn(clean_content)
             await message.channel.send(response)
-
-DISCORD_TOKEN = 'MYTOKEN.HERE'
 
 bot = MegaHALBot(
    brain_file="megahal.pkl",  # Brain file path

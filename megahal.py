@@ -89,7 +89,7 @@ class MegaHAL:
                        and re.match(r"^\w", word)]
 
         if len(keywords) < 1:
-            return "..."
+            return ".. a new word added to the database"
 
         seed = random.choices(keywords)[0]
         return self.interpret(self.generate([seed]))

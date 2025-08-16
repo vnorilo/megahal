@@ -68,4 +68,16 @@ async def on_ready():
    print(f'Brain file: {bot.brain_file}')
    print(f'Learning mode: {"enabled" if bot.learn_mode else "disabled"}')
 
+@bot.command(name="knuth")
+async def knuth(ctx, *args):
+    """Generate Knuth response using MegaHAL"""
+    response = bot.megahal.respond("knuth")
+    
+    # Handle mentions
+    if args:
+        mentions = " ".join(args)
+        await ctx.send(f"{mentions}: {response}")
+    else:
+        await ctx.send(response)
+
 bot.run(DISCORD_TOKEN)
